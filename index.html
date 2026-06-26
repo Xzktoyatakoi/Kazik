@@ -5,118 +5,297 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ракетка 🚀</title>
     <style>
-        * { margin:0; padding:0; box-sizing:border-box; user-select:none; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
-            background: radial-gradient(ellipse at 50% 0%, #1a1f4e 0%, #0b0e1a 100%);
+            background: linear-gradient(135deg, #0a0e27 0%, #1a1f4e 40%, #0f1535 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             color: #fff;
-            padding: 16px;
-            overflow: hidden;
-        }
-        body::before {
-            content: '';
-            position: fixed;
-            top:0;left:0;right:0;bottom:0;
-            background-image: radial-gradient(2px 2px at 20% 30%, #fff, transparent), radial-gradient(2px 2px at 40% 70%, #fff, transparent), radial-gradient(2px 2px at 60% 20%, #fff, transparent), radial-gradient(2px 2px at 80% 60%, #fff, transparent), radial-gradient(2px 2px at 10% 80%, #fff, transparent), radial-gradient(2px 2px at 90% 10%, #fff, transparent), radial-gradient(2px 2px at 50% 50%, #fff, transparent);
-            background-size: 100% 100%;
-            opacity:0.3;
-            pointer-events:none;
-            z-index:0;
+            padding: 12px;
         }
         .app {
-            position:relative;
-            max-width:420px;
-            width:100%;
-            background:rgba(255,255,255,0.06);
-            backdrop-filter:blur(12px);
-            -webkit-backdrop-filter:blur(12px);
-            border-radius:32px;
-            padding:20px 16px;
-            border:1px solid rgba(255,255,255,0.08);
-            box-shadow:0 30px 60px rgba(0,0,0,0.6);
-            z-index:1;
+            max-width: 420px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 28px;
+            padding: 20px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
         }
-        .header { display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
-        .logo { font-weight:700; font-size:20px; background:linear-gradient(135deg,#fbbf24,#f59e0b); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
-        .balance { font-size:14px; color:#a0aec0; background:rgba(255,255,255,0.08); padding:6px 14px; border-radius:20px; backdrop-filter:blur(4px); }
-        .balance span { color:#fbbf24; font-weight:700; }
-
-        .rocket-display { text-align:center; padding:12px 0 4px; position:relative; }
-        .multiplier { font-size:60px; font-weight:800; background:linear-gradient(135deg,#fbbf24,#f59e0b,#f97316); -webkit-background-clip:text; -webkit-text-fill-color:transparent; text-shadow:0 0 60px rgba(251,191,36,0.2); letter-spacing:-2px; }
-        .multiplier-label { font-size:13px; color:#94a3b8; margin-top:-4px; letter-spacing:2px; }
-        .status { font-size:15px; color:#cbd5e1; margin-top:8px; min-height:24px; font-weight:500; }
-
-        .gif-container { position:relative; width:100%; max-width:280px; margin:0 auto 8px; border-radius:20px; overflow:hidden; background:rgba(0,0,0,0.3); aspect-ratio:16/9; display:none; justify-content:center; align-items:center; }
-        .gif-container img { width:100%; height:100%; object-fit:cover; }
-        .gif-container.show { display:flex; }
-
-        .timer { font-size:28px; font-weight:700; color:#fbbf24; text-align:center; margin:4px 0; }
-
-        .bet-section { background:rgba(255,255,255,0.05); border-radius:20px; padding:14px 12px; margin:8px 0; border:1px solid rgba(255,255,255,0.04); }
-        .bet-title { font-size:12px; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
-        .bet-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-        .bet-btn { background:rgba(255,255,255,0.06); border:none; border-radius:12px; padding:10px 4px; color:#e2e8f0; font-size:15px; font-weight:600; cursor:pointer; transition:all 0.15s; }
-        .bet-btn:active { transform:scale(0.94); background:rgba(255,255,255,0.15); }
-        .bet-btn.custom { background:rgba(251,191,36,0.08); color:#fbbf24; }
-
-        .action-btn { width:100%; padding:14px; border:none; border-radius:16px; font-size:17px; font-weight:700; cursor:pointer; transition:all 0.15s; margin-top:6px; }
-        .action-btn:active { transform:scale(0.96); }
-        .action-btn.start { background:linear-gradient(135deg,#fbbf24,#f59e0b); color:#0b0e1a; }
-        .action-btn.cashout { background:linear-gradient(135deg,#34d399,#10b981); color:#0b0e1a; }
-        .action-btn:disabled { opacity:0.4; pointer-events:none; }
-
+        /* Заголовок */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .logo {
+            font-weight: 700;
+            font-size: 20px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .balance {
+            font-size: 14px;
+            color: #94a3b8;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 6px 14px;
+            border-radius: 20px;
+        }
+        .balance span {
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        /* Дисплей множителя */
+        .rocket-display {
+            text-align: center;
+            padding: 20px 0 8px;
+        }
+        .multiplier {
+            font-size: 68px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b, #f97316);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 80px rgba(251, 191, 36, 0.15);
+            letter-spacing: -2px;
+        }
+        .multiplier-label {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: -4px;
+            letter-spacing: 2px;
+        }
+        .status {
+            font-size: 15px;
+            color: #94a3b8;
+            margin-top: 8px;
+            min-height: 24px;
+        }
+        /* Таймер */
+        .timer {
+            font-size: 32px;
+            font-weight: 700;
+            color: #fbbf24;
+            text-align: center;
+            margin: 4px 0;
+        }
+        .hidden {
+            display: none !important;
+        }
+        /* Секция ставок */
+        .bet-section {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 18px;
+            padding: 14px 12px;
+            margin: 8px 0;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .bet-title {
+            font-size: 12px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        .bet-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+        .bet-btn {
+            background: rgba(255, 255, 255, 0.06);
+            border: none;
+            border-radius: 12px;
+            padding: 10px 4px;
+            color: #e2e8f0;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .bet-btn:active {
+            transform: scale(0.94);
+            background: rgba(255, 255, 255, 0.12);
+        }
+        .bet-btn.custom {
+            background: rgba(251, 191, 36, 0.08);
+            color: #fbbf24;
+        }
+        /* Кнопки действий */
+        .action-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 16px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.15s;
+            margin-top: 6px;
+        }
+        .action-btn:active {
+            transform: scale(0.96);
+        }
+        .action-btn.start {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: #0b0e1a;
+        }
+        .action-btn.cashout {
+            background: linear-gradient(135deg, #34d399, #10b981);
+            color: #0b0e1a;
+        }
+        .action-btn:disabled {
+            opacity: 0.4;
+            pointer-events: none;
+        }
+        /* История игр */
         .history {
-            background:rgba(255,255,255,0.04);
-            border-radius:16px;
-            padding:10px 12px;
-            margin:10px 0 4px;
-            max-height:100px;
-            overflow-y:auto;
-            font-size:13px;
-            color:#94a3b8;
-            border:1px solid rgba(255,255,255,0.04);
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 14px;
+            padding: 10px 12px;
+            margin: 10px 0 4px;
+            max-height: 90px;
+            overflow-y: auto;
+            font-size: 13px;
+            color: #94a3b8;
+            border: 1px solid rgba(255, 255, 255, 0.03);
         }
-        .history-item { display:flex; justify-content:space-between; padding:3px 0; border-bottom:1px solid rgba(255,255,255,0.04); }
-        .history-item.win { color:#34d399; }
-        .history-item.lose { color:#f87171; }
-
-        .bottom-menu { display:flex; justify-content:space-around; margin-top:10px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.06); }
-        .menu-item { text-align:center; font-size:11px; color:#64748b; cursor:pointer; transition:color 0.2s; background:none; border:none; padding:0; }
-        .menu-item:hover { color:#e2e8f0; }
-        .menu-item .icon { font-size:20px; display:block; margin-bottom:2px; }
-
-        .hidden { display:none !important; }
-
-        .deposit-section { background:rgba(255,255,255,0.05); border-radius:20px; padding:14px; margin:8px 0; border:1px solid rgba(255,255,255,0.04); }
-        .deposit-title { font-size:14px; color:#94a3b8; margin-bottom:8px; }
-        .deposit-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
-        .deposit-btn { background:rgba(251,191,36,0.1); border:none; border-radius:12px; padding:10px; color:#fbbf24; font-size:14px; font-weight:600; cursor:pointer; transition:all 0.15s; }
-        .deposit-btn:active { transform:scale(0.94); background:rgba(251,191,36,0.2); }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        .history-item.win {
+            color: #34d399;
+        }
+        .history-item.lose {
+            color: #f87171;
+        }
+        /* Нижнее меню */
+        .bottom-menu {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .menu-item {
+            text-align: center;
+            font-size: 11px;
+            color: #64748b;
+            cursor: pointer;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            padding: 0;
+        }
+        .menu-item:hover {
+            color: #e2e8f0;
+        }
+        .menu-item .icon {
+            font-size: 22px;
+            display: block;
+            margin-bottom: 2px;
+        }
+        /* Меню пополнения (всплывающее) */
+        .deposit-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        .deposit-overlay.show {
+            display: flex;
+        }
+        .deposit-modal {
+            background: #1a1f35;
+            border-radius: 28px;
+            padding: 28px 24px;
+            max-width: 360px;
+            width: 90%;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+        }
+        .deposit-modal h3 {
+            color: #fbbf24;
+            font-size: 20px;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+        .deposit-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .deposit-btn {
+            background: rgba(251, 191, 36, 0.08);
+            border: 1px solid rgba(251, 191, 36, 0.15);
+            border-radius: 14px;
+            padding: 14px 6px;
+            color: #fbbf24;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .deposit-btn:active {
+            transform: scale(0.94);
+            background: rgba(251, 191, 36, 0.2);
+        }
+        .deposit-close {
+            background: rgba(255, 255, 255, 0.06);
+            border: none;
+            color: #94a3b8;
+            padding: 10px;
+            border-radius: 12px;
+            font-size: 14px;
+            width: 100%;
+            margin-top: 12px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+
 <div class="app" id="app">
+    <!-- Заголовок -->
     <div class="header">
         <div class="logo">🚀 Ракетка</div>
         <div class="balance">💎 <span id="balanceDisplay">200</span></div>
     </div>
 
+    <!-- Множитель -->
     <div class="rocket-display">
         <div class="multiplier" id="multiplierDisplay">1.00X</div>
         <div class="multiplier-label">Множитель</div>
         <div class="status" id="statusDisplay">Выбери ставку</div>
     </div>
 
-    <div class="gif-container" id="gifContainer">
-        <img id="gifImage" src="" alt="анимация">
-    </div>
+    <!-- Таймер -->
+    <div class="timer hidden" id="timerDisplay"></div>
 
-    <div class="timer" id="timerDisplay"></div>
-
+    <!-- Ставки -->
     <div class="bet-section" id="betSection">
         <div class="bet-title">Выбери ставку</div>
         <div class="bet-grid">
@@ -129,8 +308,30 @@
         </div>
     </div>
 
-    <div class="deposit-section" id="depositSection">
-        <div class="deposit-title">⭐ Пополнить монеты (1 Star = 10 монет)</div>
+    <!-- Кнопки Старт / Забрать -->
+    <button class="action-btn start" id="startBtn">🚀 Старт</button>
+    <button class="action-btn cashout hidden" id="cashoutBtn">🎁 Забрать</button>
+
+    <!-- История -->
+    <div class="history" id="historyContainer">
+        <div style="color:#64748b;font-size:11px;text-align:center;margin-bottom:4px;">История игр</div>
+        <div id="historyList"></div>
+    </div>
+
+    <!-- Нижнее меню -->
+    <div class="bottom-menu">
+        <button class="menu-item" id="menuBalance"><span class="icon">💎</span>Баланс</button>
+        <button class="menu-item" id="menuTop"><span class="icon">🏆</span>Топ</button>
+        <button class="menu-item" id="menuDeposit"><span class="icon">⭐</span>Пополнить</button>
+        <button class="menu-item" id="menuHelp"><span class="icon">❄️</span>Помощь</button>
+    </div>
+</div>
+
+<!-- Модальное окно пополнения -->
+<div class="deposit-overlay" id="depositOverlay">
+    <div class="deposit-modal">
+        <h3>⭐ Пополнить монеты</h3>
+        <p style="color:#94a3b8;text-align:center;margin-bottom:14px;font-size:14px;">1 Star = 10 монет</p>
         <div class="deposit-grid">
             <button class="deposit-btn" data-stars="1">1 ⭐</button>
             <button class="deposit-btn" data-stars="5">5 ⭐</button>
@@ -139,20 +340,7 @@
             <button class="deposit-btn" data-stars="50">50 ⭐</button>
             <button class="deposit-btn" data-stars="100">100 ⭐</button>
         </div>
-    </div>
-
-    <button class="action-btn start" id="startBtn">🚀 Старт</button>
-    <button class="action-btn cashout hidden" id="cashoutBtn">🎁 Забрать</button>
-
-    <div class="history" id="historyContainer">
-        <div style="color:#64748b;font-size:12px;text-align:center;">История игр</div>
-        <div id="historyList"></div>
-    </div>
-
-    <div class="bottom-menu">
-        <button class="menu-item" id="menuBalance"><span class="icon">💎</span>Баланс</button>
-        <button class="menu-item" id="menuTop"><span class="icon">🏆</span>Топ</button>
-        <button class="menu-item" id="menuHelp"><span class="icon">❄️</span>Помощь</button>
+        <button class="deposit-close" id="depositClose">✕ Закрыть</button>
     </div>
 </div>
 
@@ -180,29 +368,16 @@
     const betSection = document.getElementById('betSection');
     const startBtn = document.getElementById('startBtn');
     const cashoutBtn = document.getElementById('cashoutBtn');
-    const gifContainer = document.getElementById('gifContainer');
-    const gifImage = document.getElementById('gifImage');
     const timerDisplay = document.getElementById('timerDisplay');
     const historyList = document.getElementById('historyList');
-    const depositSection = document.getElementById('depositSection');
+    const depositOverlay = document.getElementById('depositOverlay');
 
-    // ===== Гифки =====
-    const GIF_TAKEOFF = 'https://media.giphy.com/media/3o7aTskHEUdgCQAXde/giphy.gif';
-    const GIF_EXPLOSION = 'https://media.giphy.com/media/l0MYt5jPR6Q5jA2bi/giphy.gif';
-
+    // ===== Обновление баланса =====
     function updateBalanceUI() {
         balanceDisplay.textContent = balance;
     }
 
-    function showGif(url) {
-        gifImage.src = url;
-        gifContainer.classList.add('show');
-    }
-    function hideGif() {
-        gifContainer.classList.remove('show');
-        gifImage.src = '';
-    }
-
+    // ===== История =====
     function addHistory(type, betAmount, result) {
         gameHistory.unshift({ type, bet: betAmount, result });
         if (gameHistory.length > 20) gameHistory.pop();
@@ -217,11 +392,13 @@
         }).join('');
     }
 
-    // ===== Генерация краш-точки (реалистичные шансы) =====
+    // ===== Генерация краш-точки (реалистичные шансы, может быть 1.00) =====
     function generateCrashPoint() {
         let r = Math.random();
-        let base = 1.0 / (1.0 - Math.pow(r, 1.5));
-        let crash = Math.min(base, 50);
+        // Смесь: иногда сразу падает на 1.00, иногда немного выше
+        if (r < 0.05) return 1.00; // 5% шанс мгновенного краша
+        let base = 1.0 / (1.0 - Math.pow(r, 1.3));
+        let crash = Math.min(base, 30);
         return Math.round(crash * 100) / 100;
     }
 
@@ -248,21 +425,30 @@
         });
     });
 
-    // ===== Пополнение баланса (Stars) =====
+    // ===== Пополнение (через модалку) =====
     document.querySelectorAll('.deposit-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const stars = parseInt(this.dataset.stars);
             const coins = stars * 10;
-            // В реальности здесь должен быть вызов Telegram Stars API.
-            // Пока просто добавляем монеты (для демонстрации).
             balance += coins;
             updateBalanceUI();
             statusDisplay.textContent = `✅ Пополнено ${coins} монет (${stars} ⭐)`;
+            depositOverlay.classList.remove('show');
             if (tg) tg.HapticFeedback?.notificationOccurred('success');
         });
     });
 
-    // ===== Таймер перед стартом =====
+    document.getElementById('menuDeposit').addEventListener('click', function() {
+        depositOverlay.classList.add('show');
+    });
+    document.getElementById('depositClose').addEventListener('click', function() {
+        depositOverlay.classList.remove('show');
+    });
+    depositOverlay.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('show');
+    });
+
+    // ===== Таймер =====
     function startCountdown() {
         countdown = 5;
         timerDisplay.textContent = countdown;
@@ -272,9 +458,7 @@
             if (countdown <= 0) {
                 clearInterval(timerInterval);
                 timerInterval = null;
-                timerDisplay.textContent = '';
                 timerDisplay.classList.add('hidden');
-                // Запускаем игру
                 actuallyStartGame();
             } else {
                 timerDisplay.textContent = countdown;
@@ -292,49 +476,44 @@
         updateBalanceUI();
 
         crashPoint = generateCrashPoint();
-        if (crashPoint < 1.01) crashPoint = 1.01;
+        if (crashPoint < 1.00) crashPoint = 1.00;
 
         multiplier = 1.00;
         isPlaying = true;
         isCrashed = false;
 
         betSection.classList.add('hidden');
-        depositSection.classList.add('hidden');
         startBtn.classList.add('hidden');
         cashoutBtn.classList.remove('hidden');
         statusDisplay.textContent = '🚀 Взлёт!';
-        showGif(GIF_TAKEOFF);
 
         if (gameInterval) clearInterval(gameInterval);
-        setTimeout(() => {
-            hideGif();
-            gameInterval = setInterval(() => {
-                multiplier += 0.05;
-                multiplier = Math.round(multiplier * 100) / 100;
-                multiplierDisplay.textContent = multiplier.toFixed(2) + 'X';
+        // Имитация плавного роста
+        let step = 0.05;
+        let delay = 200;
+        gameInterval = setInterval(() => {
+            multiplier += step;
+            multiplier = Math.round(multiplier * 100) / 100;
+            multiplierDisplay.textContent = multiplier.toFixed(2) + 'X';
 
-                if (multiplier >= crashPoint) {
-                    clearInterval(gameInterval);
-                    gameInterval = null;
-                    isCrashed = true;
-                    isPlaying = false;
-                    multiplierDisplay.textContent = crashPoint.toFixed(2) + 'X';
-                    statusDisplay.textContent = `💥 БУМ! ${crashPoint.toFixed(2)}X — проиграл ${bet} монет`;
-                    addHistory('lose', bet, bet);
-                    showGif(GIF_EXPLOSION);
-                    setTimeout(() => {
-                        hideGif();
-                        betSection.classList.remove('hidden');
-                        depositSection.classList.remove('hidden');
-                        startBtn.classList.remove('hidden');
-                        cashoutBtn.classList.add('hidden');
-                        document.querySelectorAll('.bet-btn').forEach(b => b.style.border = 'none');
-                        bet = 0;
-                    }, 2000);
-                    if (tg) tg.HapticFeedback?.impactOccurred('heavy');
-                }
-            }, 200);
-        }, 1500);
+            if (multiplier >= crashPoint) {
+                clearInterval(gameInterval);
+                gameInterval = null;
+                isCrashed = true;
+                isPlaying = false;
+                multiplierDisplay.textContent = crashPoint.toFixed(2) + 'X';
+                statusDisplay.textContent = `💥 БУМ! ${crashPoint.toFixed(2)}X — проиграл ${bet} монет`;
+                addHistory('lose', bet, bet);
+                setTimeout(() => {
+                    betSection.classList.remove('hidden');
+                    startBtn.classList.remove('hidden');
+                    cashoutBtn.classList.add('hidden');
+                    document.querySelectorAll('.bet-btn').forEach(b => b.style.border = 'none');
+                    bet = 0;
+                }, 1200);
+                if (tg) tg.HapticFeedback?.impactOccurred('heavy');
+            }
+        }, delay);
 
         if (tg) tg.HapticFeedback?.impactOccurred('light');
     }
@@ -361,7 +540,6 @@
         statusDisplay.textContent = `🎁 Забрал ${multiplier.toFixed(2)}X! Выигрыш: ${win} монет`;
         addHistory('win', bet, win);
         betSection.classList.remove('hidden');
-        depositSection.classList.remove('hidden');
         startBtn.classList.remove('hidden');
         cashoutBtn.classList.add('hidden');
         document.querySelectorAll('.bet-btn').forEach(b => b.style.border = 'none');
@@ -389,7 +567,7 @@
     updateBalanceUI();
     statusDisplay.textContent = 'Выбери ставку и нажми «Старт»';
     multiplierDisplay.textContent = '1.00X';
-    console.log('🎄 Ракетка загружена');
+    console.log('🚀 Ракетка загружена');
 </script>
 </body>
-</html>
+    </html>
