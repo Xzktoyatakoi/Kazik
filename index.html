@@ -1,41 +1,36 @@
-import asyncio
-from fastapi import FastAPI
-from aiogram import Bot, Dispatcher, types
-from aiogram.filters import Command
-from aiogram.types import WebAppInfo, InlineKeyboardMarkup, InlineKeyboardButton
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { background: #000; color: #0f0; font-family: 'Courier New', monospace; padding: 20px; }
+        #terminal { width: 100%; height: 80vh; overflow-y: auto; white-space: pre-wrap; }
+        input { background: transparent; border: none; color: #fff; width: 100%; outline: none; }
+    </style>
+</head>
+<body>
+    <div id="terminal">--- CyberRange v1.0 ---<br>> </div>
+    <input type="text" id="cmdInput" autofocus>
 
-TOKEN = "8979123623:AAEwQlG-AZTuaif1vnHeZPHpM0lRS67fNd8" # Сразу вшиваю, но лучше убери в .env
-bot = Bot(token=TOKEN)
-dp = Dispatcher()
-app = FastAPI()
+    <script>
+        const input = document.getElementById('cmdInput');
+        const terminal = document.getElementById('terminal');
 
-# 1. Telegram Bot Logic
-@dp.message(Command("start"))
-async def start(message: types.Message):
-    # Кнопка для запуска Mini App
-    web_app_url = "https://ТВОЙ_НГРОК_ТУТ.ngrok-free.app" # СЮДА ВСТАВЬ ССЫЛКУ ИЗ NGROK
-    kb = InlineKeyboardMarkup(inline_keyboard=[[
-        InlineKeyboardButton(text="Открыть Полигон", web_app=WebAppInfo(url=web_app_url))
-    ]])
-    await message.answer("Добро пожаловать в CyberRange. Твой полигон готов к работе.", reply_markup=kb)
-
-# 2. FastAPI (Backend for Mini App)
-@app.post("/api/cmd")
-async def handle_cmd(data: dict):
-    cmd = data.get("cmd", "")
-    # Логика твоего полигона
-    if cmd == "help":
-        return {"result": "Режимы: [RedTeam] [BlueTeam]. Доступные утилиты: nmap, msf, bash."}
-    return {"result": f"Выполнил: {cmd}\n[System] Ошибок не обнаружено."}
-
-async def main():
-    await dp.start_polling(bot)
-
-if __name__ == "__main__":
-    # Для запуска обоих процессов (бота и API) используй две вкладки терминала
-    # 1. python main.py (для бота)
-    # 2. uvicorn main:app (для Web App API)
-    import threading
-    threading.Thread(target=lambda: asyncio.run(main())).start()
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+        input.addEventListener('keypress', async (e) => {
+            if (e.key === 'Enter') {
+                const cmd = input.value;
+                terminal.innerHTML += `\n> ${cmd}\n`;
+                
+                const response = await fetch('http://127.0.0.1:8000/execute', {
+                    method: 'POST',
+                    body: JSON.stringify({cmd}),
+                    headers: {'Content-Type': 'application/json'}
+                });
+                const data = await response.json();
+                terminal.innerHTML += data.output + "\n";
+                input.value = '';
+                terminal.scrollTop = terminal.scrollHeight;
+            }
+        });
+    </script>
+</body>
+</html>
