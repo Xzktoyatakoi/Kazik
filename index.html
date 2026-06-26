@@ -2,86 +2,140 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ракетка 🚀</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin:0; padding:0; box-sizing:border-box; user-select:none; }
         body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: linear-gradient(145deg, #0b0e1a 0%, #1a1f35 100%);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: radial-gradient(ellipse at 50% 0%, #1a1f4e 0%, #0b0e1a 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             color: #fff;
             padding: 16px;
+            overflow: hidden;
+        }
+        /* Снежинки (простой фон) */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: 
+                radial-gradient(2px 2px at 20% 30%, #fff, transparent),
+                radial-gradient(2px 2px at 40% 70%, #fff, transparent),
+                radial-gradient(2px 2px at 60% 20%, #fff, transparent),
+                radial-gradient(2px 2px at 80% 60%, #fff, transparent),
+                radial-gradient(2px 2px at 10% 80%, #fff, transparent),
+                radial-gradient(2px 2px at 90% 10%, #fff, transparent),
+                radial-gradient(2px 2px at 50% 50%, #fff, transparent);
+            background-size: 100% 100%;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 0;
         }
         .app {
-            max-width: 400px;
+            position: relative;
+            max-width: 420px;
             width: 100%;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255,255,255,0.06);
             backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             border-radius: 32px;
-            padding: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            padding: 24px 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+            z-index: 1;
         }
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            margin-bottom: 16px;
+        }
+        .logo {
+            font-weight: 700;
+            font-size: 20px;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         .balance {
             font-size: 14px;
             color: #a0aec0;
-            background: rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.08);
             padding: 6px 14px;
             border-radius: 20px;
+            backdrop-filter: blur(4px);
         }
-        .balance span {
-            color: #fbbf24;
-            font-weight: 700;
-        }
+        .balance span { color: #fbbf24; font-weight: 700; }
+
         .rocket-display {
             text-align: center;
-            padding: 32px 0;
+            padding: 16px 0 8px;
+            position: relative;
         }
         .multiplier {
-            font-size: 56px;
+            font-size: 64px;
             font-weight: 800;
-            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            background: linear-gradient(135deg, #fbbf24, #f59e0b, #f97316);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 40px rgba(251, 191, 36, 0.15);
+            text-shadow: 0 0 60px rgba(251,191,36,0.2);
+            letter-spacing: -2px;
         }
         .multiplier-label {
             font-size: 14px;
             color: #94a3b8;
-            margin-top: 8px;
+            margin-top: -4px;
+            letter-spacing: 2px;
         }
         .status {
             font-size: 16px;
             color: #cbd5e1;
             margin-top: 12px;
             min-height: 28px;
+            font-weight: 500;
         }
-        .bet-section {
-            background: rgba(255,255,255,0.04);
+
+        /* ГИФКИ */
+        .gif-container {
+            position: relative;
+            width: 100%;
+            max-width: 280px;
+            margin: 0 auto 10px;
             border-radius: 20px;
-            padding: 20px;
-            margin: 16px 0;
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+            aspect-ratio: 16/9;
+            display: none;
+            justify-content: center;
+            align-items: center;
+        }
+        .gif-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .gif-container.show {
+            display: flex;
+        }
+
+        .bet-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 16px 14px;
+            margin: 12px 0 8px;
+            border: 1px solid rgba(255,255,255,0.04);
         }
         .bet-title {
-            font-size: 13px;
+            font-size: 12px;
             color: #94a3b8;
             text-transform: uppercase;
             letter-spacing: 1px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
         .bet-grid {
             display: grid;
@@ -92,21 +146,16 @@
             background: rgba(255,255,255,0.06);
             border: none;
             border-radius: 12px;
-            padding: 12px;
+            padding: 12px 4px;
             color: #e2e8f0;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.15s;
         }
-        .bet-btn:active {
-            transform: scale(0.94);
-            background: rgba(255,255,255,0.12);
-        }
-        .bet-btn.custom {
-            background: rgba(251, 191, 36, 0.08);
-            color: #fbbf24;
-        }
+        .bet-btn:active { transform: scale(0.94); background: rgba(255,255,255,0.15); }
+        .bet-btn.custom { background: rgba(251,191,36,0.08); color: #fbbf24; }
+
         .action-btn {
             width: 100%;
             padding: 16px;
@@ -116,11 +165,9 @@
             font-weight: 700;
             cursor: pointer;
             transition: all 0.15s;
-            margin-top: 12px;
+            margin-top: 8px;
         }
-        .action-btn:active {
-            transform: scale(0.96);
-        }
+        .action-btn:active { transform: scale(0.96); }
         .action-btn.start {
             background: linear-gradient(135deg, #fbbf24, #f59e0b);
             color: #0b0e1a;
@@ -129,15 +176,13 @@
             background: linear-gradient(135deg, #34d399, #10b981);
             color: #0b0e1a;
         }
-        .action-btn:disabled {
-            opacity: 0.4;
-            pointer-events: none;
-        }
+        .action-btn:disabled { opacity: 0.4; pointer-events: none; }
+
         .bottom-menu {
             display: flex;
             justify-content: space-around;
-            margin-top: 20px;
-            padding-top: 16px;
+            margin-top: 16px;
+            padding-top: 14px;
             border-top: 1px solid rgba(255,255,255,0.06);
         }
         .menu-item {
@@ -148,244 +193,222 @@
             transition: color 0.2s;
             background: none;
             border: none;
+            padding: 0;
         }
-        .menu-item:hover {
-            color: #e2e8f0;
-        }
-        .menu-item .icon {
-            font-size: 22px;
-            display: block;
-            margin-bottom: 4px;
-        }
-        .hidden {
-            display: none !important;
-        }
+        .menu-item:hover { color: #e2e8f0; }
+        .menu-item .icon { font-size: 22px; display: block; margin-bottom: 2px; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
-    <div class="app" id="app">
-        <div class="header">
-            <div style="font-weight:700; font-size:18px;">🚀 Ракетка</div>
-            <div class="balance">💎 <span id="balanceDisplay">200</span></div>
-        </div>
+<div class="app" id="app">
+    <div class="header">
+        <div class="logo">🚀 Ракетка</div>
+        <div class="balance">💎 <span id="balanceDisplay">200</span></div>
+    </div>
 
-        <div class="rocket-display">
-            <div class="multiplier" id="multiplierDisplay">1.00</div>
-            <div class="multiplier-label">Множитель</div>
-            <div class="status" id="statusDisplay">Нажми «Старт»</div>
-        </div>
+    <div class="rocket-display">
+        <div class="multiplier" id="multiplierDisplay">1.00X</div>
+        <div class="multiplier-label">Множитель</div>
+        <div class="status" id="statusDisplay">Выбери ставку</div>
+    </div>
 
-        <div class="bet-section" id="betSection">
-            <div class="bet-title">Выбери ставку</div>
-            <div class="bet-grid">
-                <button class="bet-btn" data-bet="10">10</button>
-                <button class="bet-btn" data-bet="50">50</button>
-                <button class="bet-btn" data-bet="100">100</button>
-                <button class="bet-btn" data-bet="500">500</button>
-                <button class="bet-btn" data-bet="1000">1000</button>
-                <button class="bet-btn custom" data-bet="custom">✏️ Своя</button>
-            </div>
-        </div>
+    <!-- Контейнер для гифок -->
+    <div class="gif-container" id="gifContainer">
+        <img id="gifImage" src="" alt="анимация">
+    </div>
 
-        <button class="action-btn start" id="startBtn">🚀 Старт</button>
-        <button class="action-btn cashout hidden" id="cashoutBtn">🎁 Забрать</button>
-
-        <div class="bottom-menu">
-            <button class="menu-item" id="menuBalance"><span class="icon">💎</span>Баланс</button>
-            <button class="menu-item" id="menuTop"><span class="icon">🏆</span>Топ</button>
-            <button class="menu-item" id="menuHelp"><span class="icon">❄️</span>Помощь</button>
+    <div class="bet-section" id="betSection">
+        <div class="bet-title">Выбери ставку</div>
+        <div class="bet-grid">
+            <button class="bet-btn" data-bet="10">10</button>
+            <button class="bet-btn" data-bet="50">50</button>
+            <button class="bet-btn" data-bet="100">100</button>
+            <button class="bet-btn" data-bet="500">500</button>
+            <button class="bet-btn" data-bet="1000">1000</button>
+            <button class="bet-btn custom" data-bet="custom">✏️ Своя</button>
         </div>
     </div>
 
-    <script>
-        // ================================================
-        // 1. ПОДКЛЮЧЕНИЕ К TELEGRAM WEB APP
-        // ================================================
-        let tg = window.Telegram?.WebApp;
-        if (tg) {
-            tg.ready();
-            tg.expand();
-        }
+    <button class="action-btn start" id="startBtn">🚀 Старт</button>
+    <button class="action-btn cashout hidden" id="cashoutBtn">🎁 Забрать</button>
 
-        // ================================================
-        // 2. СОСТОЯНИЕ ИГРЫ
-        // ================================================
-        let balance = 200;
-        let bet = 0;
-        let multiplier = 1.0;
-        let isPlaying = false;
-        let isCrashed = false;
-        let crashPoint = 0;
-        let gameInterval = null;
+    <div class="bottom-menu">
+        <button class="menu-item" id="menuBalance"><span class="icon">💎</span>Баланс</button>
+        <button class="menu-item" id="menuTop"><span class="icon">🏆</span>Топ</button>
+        <button class="menu-item" id="menuHelp"><span class="icon">❄️</span>Помощь</button>
+    </div>
+</div>
 
-        // ================================================
-        // 3. DOM-ЭЛЕМЕНТЫ
-        // ================================================
-        const balanceDisplay = document.getElementById('balanceDisplay');
-        const multiplierDisplay = document.getElementById('multiplierDisplay');
-        const statusDisplay = document.getElementById('statusDisplay');
-        const betSection = document.getElementById('betSection');
-        const startBtn = document.getElementById('startBtn');
-        const cashoutBtn = document.getElementById('cashoutBtn');
+<script>
+    // Подключение Telegram WebApp
+    let tg = window.Telegram?.WebApp;
+    if (tg) { tg.ready(); tg.expand(); }
 
-        // ================================================
-        // 4. ОБНОВЛЕНИЕ БАЛАНСА
-        // ================================================
-        function updateBalanceUI() {
-            balanceDisplay.textContent = balance;
-        }
+    // Состояние игры
+    let balance = 200;
+    let bet = 0;
+    let multiplier = 1.00;
+    let isPlaying = false;
+    let isCrashed = false;
+    let crashPoint = 0;
+    let gameInterval = null;
 
-        // ================================================
-        // 5. ВЫБОР СТАВКИ
-        // ================================================
-        document.querySelectorAll('.bet-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                if (isPlaying) return;
-                const val = this.dataset.bet;
-                if (val === 'custom') {
-                    const custom = prompt('Введите свою сумму:', '25');
-                    if (custom && !isNaN(custom) && Number(custom) > 0) {
-                        bet = Number(custom);
-                    } else {
-                        return;
-                    }
-                } else {
-                    bet = Number(val);
-                }
-                if (bet > balance) {
-                    statusDisplay.textContent = '❌ Недостаточно монет!';
-                    bet = 0;
-                    return;
-                }
-                statusDisplay.textContent = `Ставка: ${bet} монет`;
-                // Визуально выделяем выбранную кнопку
-                document.querySelectorAll('.bet-btn').forEach(b => b.style.border = 'none');
-                this.style.border = '2px solid #fbbf24';
-            });
-        });
+    // DOM
+    const balanceDisplay = document.getElementById('balanceDisplay');
+    const multiplierDisplay = document.getElementById('multiplierDisplay');
+    const statusDisplay = document.getElementById('statusDisplay');
+    const betSection = document.getElementById('betSection');
+    const startBtn = document.getElementById('startBtn');
+    const cashoutBtn = document.getElementById('cashoutBtn');
+    const gifContainer = document.getElementById('gifContainer');
+    const gifImage = document.getElementById('gifImage');
 
-        // ================================================
-        // 6. СТАРТ ИГРЫ
-        // ================================================
-        startBtn.addEventListener('click', function() {
+    // Гифки (можно заменить на свои ссылки)
+    const GIF_TAKEOFF = 'https://media.giphy.com/media/3o7aTskHEUdgCQAXde/giphy.gif';
+    const GIF_EXPLOSION = 'https://media.giphy.com/media/l0MYt5jPR6Q5jA2bi/giphy.gif';
+
+    function updateBalanceUI() {
+        balanceDisplay.textContent = balance;
+    }
+
+    // Показать гифку
+    function showGif(url) {
+        gifImage.src = url;
+        gifContainer.classList.add('show');
+    }
+    function hideGif() {
+        gifContainer.classList.remove('show');
+        gifImage.src = '';
+    }
+
+    // Выбор ставки
+    document.querySelectorAll('.bet-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
             if (isPlaying) return;
-            if (bet <= 0) {
-                statusDisplay.textContent = '⚠️ Сначала выбери ставку!';
-                return;
+            const val = this.dataset.bet;
+            if (val === 'custom') {
+                const custom = prompt('Введите свою сумму:', '25');
+                if (custom && !isNaN(custom) && Number(custom) > 0) bet = Number(custom);
+                else return;
+            } else {
+                bet = Number(val);
             }
             if (bet > balance) {
                 statusDisplay.textContent = '❌ Недостаточно монет!';
+                bet = 0;
                 return;
             }
+            statusDisplay.textContent = `Ставка: ${bet} монет`;
+            document.querySelectorAll('.bet-btn').forEach(b => b.style.border = 'none');
+            this.style.border = '2px solid #fbbf24';
+        });
+    });
 
-            // Списываем ставку
-            balance -= bet;
-            updateBalanceUI();
+    // Старт
+    startBtn.addEventListener('click', function() {
+        if (isPlaying || bet <= 0 || bet > balance) {
+            if (bet <= 0) statusDisplay.textContent = '⚠️ Выбери ставку!';
+            else if (bet > balance) statusDisplay.textContent = '❌ Недостаточно монет!';
+            return;
+        }
+        // Списываем ставку
+        balance -= bet;
+        updateBalanceUI();
 
-            // Генерируем точку краша (от 1.01 до 200)
-            crashPoint = 1.00 + (Math.random() ** 3) * 199;
-            crashPoint = Math.round(crashPoint * 100) / 100;
+        // Генерируем точку краша
+        crashPoint = 1.00 + (Math.random() ** 3) * 199;
+        crashPoint = Math.round(crashPoint * 100) / 100;
+        multiplier = 1.00;
+        isPlaying = true;
+        isCrashed = false;
 
-            multiplier = 1.00;
-            isPlaying = true;
-            isCrashed = false;
+        // Скрываем ставки и кнопку Старт, показываем Забрать
+        betSection.classList.add('hidden');
+        startBtn.classList.add('hidden');
+        cashoutBtn.classList.remove('hidden');
+        statusDisplay.textContent = '🚀 Взлёт!';
 
-            // Меняем интерфейс
-            betSection.classList.add('hidden');
-            startBtn.classList.add('hidden');
-            cashoutBtn.classList.remove('hidden');
-            statusDisplay.textContent = '🚀 Ракета взлетает...';
+        // Показываем гифку взлёта
+        showGif(GIF_TAKEOFF);
 
-            // Запускаем цикл
-            if (gameInterval) clearInterval(gameInterval);
+        // Запускаем цикл с небольшим таймаутом, чтобы гифка успела показаться
+        if (gameInterval) clearInterval(gameInterval);
+        setTimeout(() => {
+            // Скрываем гифку взлёта после 1.5 секунд
+            hideGif();
+            // Начинаем обновлять множитель
             gameInterval = setInterval(() => {
                 multiplier += 0.05;
                 multiplier = Math.round(multiplier * 100) / 100;
-                multiplierDisplay.textContent = multiplier.toFixed(2);
+                multiplierDisplay.textContent = multiplier.toFixed(2) + 'X';
 
-                // Проверка краша
                 if (multiplier >= crashPoint) {
                     clearInterval(gameInterval);
                     gameInterval = null;
                     isCrashed = true;
                     isPlaying = false;
-                    multiplierDisplay.textContent = crashPoint.toFixed(2);
-                    statusDisplay.textContent = `💥 БУМ! ${crashPoint.toFixed(2)}x — ты проиграл ${bet} монет`;
-                    // Возвращаем интерфейс
-                    betSection.classList.remove('hidden');
-                    startBtn.classList.remove('hidden');
-                    cashoutBtn.classList.add('hidden');
-                    // Сбрасываем выделение ставки
-                    document.querySelectorAll('.bet-btn').forEach(b => b.style.border = 'none');
-                    bet = 0;
-                    // Уведомление в Telegram (если есть)
+                    multiplierDisplay.textContent = crashPoint.toFixed(2) + 'X';
+                    statusDisplay.textContent = `💥 БУМ! ${crashPoint.toFixed(2)}X — проиграл ${bet} монет`;
+                    // Показываем гифку взрыва
+                    showGif(GIF_EXPLOSION);
+                    setTimeout(() => {
+                        hideGif();
+                        // Возвращаем интерфейс
+                        betSection.classList.remove('hidden');
+                        startBtn.classList.remove('hidden');
+                        cashoutBtn.classList.add('hidden');
+                        document.querySelectorAll('.bet-btn').forEach(b => b.style.border = 'none');
+                        bet = 0;
+                    }, 2000);
                     if (tg) tg.HapticFeedback?.impactOccurred('heavy');
                 }
             }, 200);
+        }, 1500); // задержка для гифки взлёта
 
-            if (tg) tg.HapticFeedback?.impactOccurred('light');
-        });
+        if (tg) tg.HapticFeedback?.impactOccurred('light');
+    });
 
-        // ================================================
-        // 7. ЗАБРАТЬ (CASHOUT)
-        // ================================================
-        cashoutBtn.addEventListener('click', function() {
-            if (!isPlaying || isCrashed) return;
-
-            clearInterval(gameInterval);
-            gameInterval = null;
-            isPlaying = false;
-
-            const win = Math.round(bet * multiplier);
-            balance += win;
-            updateBalanceUI();
-
-            statusDisplay.textContent = `🎁 Забрал ${multiplier.toFixed(2)}x! Выигрыш: ${win} монет`;
-
-            betSection.classList.remove('hidden');
-            startBtn.classList.remove('hidden');
-            cashoutBtn.classList.add('hidden');
-            document.querySelectorAll('.bet-btn').forEach(b => b.style.border = 'none');
-            bet = 0;
-
-            if (tg) tg.HapticFeedback?.notificationOccurred('success');
-        });
-
-        // ================================================
-        // 8. МЕНЮ (Баланс, Топ, Помощь)
-        // ================================================
-        document.getElementById('menuBalance').addEventListener('click', function() {
-            if (tg) {
-                tg.showAlert(`💎 Твой баланс: ${balance} монет`);
-            } else {
-                alert(`💎 Твой баланс: ${balance} монет`);
-            }
-        });
-
-        document.getElementById('menuTop').addEventListener('click', function() {
-            const msg = '🏆 Топ игроков\n\n1. Ты — ' + balance + ' монет\nОстальные пока не играли 😄';
-            if (tg) {
-                tg.showAlert(msg);
-            } else {
-                alert(msg);
-            }
-        });
-
-        document.getElementById('menuHelp').addEventListener('click', function() {
-            const msg = '❄️ Как играть:\n\n1. Выбери ставку\n2. Нажми «Старт»\n3. Ракета взлетает — множитель растёт\n4. Нажми «Забрать» — зафиксируй выигрыш\n5. Если ракета взорвалась — ставка проиграна\n\nВыигрыш = ставка × множитель';
-            if (tg) {
-                tg.showAlert(msg);
-            } else {
-                alert(msg);
-            }
-        });
-
-        // ================================================
-        // 9. ИНИЦИАЛИЗАЦИЯ
-        // ================================================
+    // Забрать
+    cashoutBtn.addEventListener('click', function() {
+        if (!isPlaying || isCrashed) return;
+        clearInterval(gameInterval);
+        gameInterval = null;
+        isPlaying = false;
+        const win = Math.round(bet * multiplier);
+        balance += win;
         updateBalanceUI();
-        statusDisplay.textContent = 'Выбери ставку и нажми «Старт»';
-        console.log('🎄 Новогодняя Ракетка загружена!');
-    </script>
+        statusDisplay.textContent = `🎁 Забрал ${multiplier.toFixed(2)}X! Выигрыш: ${win} монет`;
+        // Показываем гифку победы? Можно простую анимацию, но у нас нет, просто сообщение.
+        betSection.classList.remove('hidden');
+        startBtn.classList.remove('hidden');
+        cashoutBtn.classList.add('hidden');
+        document.querySelectorAll('.bet-btn').forEach(b => b.style.border = 'none');
+        bet = 0;
+        if (tg) tg.HapticFeedback?.notificationOccurred('success');
+    });
+
+    // Меню
+    document.getElementById('menuBalance').addEventListener('click', function() {
+        if (tg) tg.showAlert(`💎 Твой баланс: ${balance} монет`);
+        else alert(`💎 Твой баланс: ${balance} монет`);
+    });
+    document.getElementById('menuTop').addEventListener('click', function() {
+        const msg = '🏆 Топ игроков\n\n1. Ты — ' + balance + ' монет\nОстальные пока не играли 😄';
+        if (tg) tg.showAlert(msg);
+        else alert(msg);
+    });
+    document.getElementById('menuHelp').addEventListener('click', function() {
+        const msg = '❄️ Как играть:\n\n1. Выбери ставку\n2. Нажми «Старт»\n3. Ракета взлетает — множитель растёт\n4. Нажми «Забрать» — зафиксируй выигрыш\n5. Если ракета взорвалась — ставка проиграна\n\nВыигрыш = ставка × множитель';
+        if (tg) tg.showAlert(msg);
+        else alert(msg);
+    });
+
+    // Инициализация
+    updateBalanceUI();
+    statusDisplay.textContent = 'Выбери ставку и нажми «Старт»';
+    multiplierDisplay.textContent = '1.00X';
+    console.log('🎄 Новогодняя Ракетка загружена!');
+</script>
 </body>
-  </html>
+</html>
